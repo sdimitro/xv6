@@ -90,6 +90,7 @@ CFLAGS  += $(patsubst %,-I%, $(modules))
 sources  :=
 objects  :=
 binaries :=
+toclean  :=
 
 # TODO: Maybe put binaries in separate folder?
 
@@ -104,7 +105,7 @@ dependencies := $(objects:.o=.d)
 # a try!
 
 clean:
-	$(RM) -r $(objects) $(dependencies) $(binaries)
+	$(RM) -r $(objects) $(dependencies) $(binaries) $(toclean)
 
 ## xv6.img: bootblock kernel fs.img
 ## 	dd if=/dev/zero of=xv6.img count=10000
