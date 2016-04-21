@@ -1,0 +1,2 @@
+- Move initcode to kernel
+- Figure out where to place shared headers between boot and kernel directory
