@@ -83,7 +83,7 @@ ASFLAGS = -m32 -gdwarf-2 -Wa,-divide
 # Illumos-Solaris might want to try``elf_i386_sol2''
 LDFLAGS += -m $(shell $(LD) -V | grep elf_i386 2>/dev/null)
 
-modules := boot
+modules := boot kernel/init
 
 CFLAGS  += $(patsubst %,-I%, $(modules))
 
@@ -93,6 +93,12 @@ binaries :=
 toclean  :=
 
 # TODO: Maybe put binaries in separate folder?
+
+fuckit:
+	@echo $(sources)
+	@echo $(objects)
+	@echo $(binaries)
+	@echo $(local_dir)
 
 include $(patsubst %,%/module.mk,$(modules))
 
