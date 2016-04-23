@@ -1,6 +1,6 @@
-dir_1      := kernel/init
+dir_1      := sys/init
 source     := initcode.S
-local_bins := $(addprefix $(dir_1)/, initcode)
+# local_bins := $(addprefix $(dir_1)/, initcode)
 local_src  := $(addprefix $(dir_1)/,$(source))
 local_objs := $(subst .c,.o,$(filter %.c,$(local_src))) \
               $(subst .S,.o,$(filter %.S,$(local_src)))
@@ -13,10 +13,10 @@ local_objs := $(subst .c,.o,$(filter %.c,$(local_src))) \
 
 objects  += $(local_objs)
 sources  += $(local_src)
-binaries += $(local_bins)
-toclean  += $(dir_1)/*.asm $(dir_1)/*.out
+binaries += initcode
+toclean  += $(dir_1)/*.asm $(dir_1)/*.out $(dir_1)/*.o $(dir_1)/*.d
 
-$(dir_1)/initcode: $(dir_1)/initcode.out $(dir_1)/initcode.o
+initcode: $(dir_1)/initcode.out $(dir_1)/initcode.o
 	$(OBJCOPY) -S -O binary -j .text $(dir_1)/initcode.out $@
 	$(OBJDUMP) -S $(dir_1)/initcode.o > $(dir_1)/initcode.asm
 

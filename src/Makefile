@@ -83,7 +83,7 @@ ASFLAGS = -m32 -gdwarf-2 -Wa,-divide
 # Illumos-Solaris might want to try``elf_i386_sol2''
 LDFLAGS += -m $(shell $(LD) -V | grep elf_i386 2>/dev/null)
 
-modules := boot kernel/init kernel
+modules := boot sys/init sys
 
 CFLAGS  += $(patsubst %,-I%, $(modules))
 
@@ -111,7 +111,7 @@ dependencies := $(objects:.o=.d)
 # a try!
 
 clean:
-	$(RM) -r $(objects) $(dependencies) $(binaries) $(toclean)
+	$(RM) -f $(binaries) $(toclean)
 
 ## xv6.img: bootblock kernel fs.img
 ## 	dd if=/dev/zero of=xv6.img count=10000

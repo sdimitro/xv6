@@ -1,2 +1,3 @@
 - Move initcode to kernel
 - Figure out where to place shared headers between boot and kernel directory
+- http://stackoverflow.com/questions/29034840/binutils-kernel-binary-meaning

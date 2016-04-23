@@ -1,4 +1,4 @@
-dir_2      := kernel
+dir_2      := sys
 source     := bio.c     \
 	      console.c \
 	      exec.c    \
@@ -37,7 +37,7 @@ asmsrc     := $(addprefix $(dir_2)/,$(filter %.S, $(source)))
 asmobjs    := $(subst .S,.o,$(asmsrc))
 kobjs      := $(cobjs) $(asmobjs)
 
-local_bins := $(addprefix $(dir_2)/, kernel)
+# local_bins := $(addprefix $(dir_2)/, kernel)
 local_src  := $(addprefix $(dir_2)/,$(source))
 local_objs := $(kobjs)
 
@@ -47,18 +47,18 @@ local_objs := $(kobjs)
 
 objects  += $(local_objs)
 sources  += $(csrc) $(asmsrc)
-binaries += $(local_bins)
-toclean  += $(dir_2)/*.asm $(dir_2)/*.sym $(dir_2)/vectors.S
+binaries += kernel
+toclean  += $(dir_2)/*.asm $(dir_2)/*.sym $(dir_2)/vectors.S $(dir_2)/*.o $(dir_2)/*.d
 
-$(dir_2)/kernel: $(kobjs) $(dir_0)/entry.o $(dir_0)/entryother $(dir_1)/initcode $(dir_2)/kernel.ld
-	$(LD) $(LDFLAGS) -T $(dir_2)/kernel.ld -o $(dir_2)/kernel $(dir_0)/entry.o $(kobjs) -b binary $(dir_1)/initcode $(dir_0)/entryother
-	$(OBJDUMP) -S $(dir_2)/kernel > $(dir_2)/kernel.asm
-	$(OBJDUMP) -t $(dir_2)/kernel | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > $(dir_2)/kernel.sym
+kernel: $(kobjs) $(dir_0)/entry.o entryother initcode $(dir_2)/kernel.ld
+	$(LD) $(LDFLAGS) -T $(dir_2)/kernel.ld -o $@ $(dir_0)/entry.o $(kobjs) -b binary initcode entryother
+	$(OBJDUMP) -S $@ > $(dir_2)/kernel.asm
+	$(OBJDUMP) -t $@ | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > $(dir_2)/kernel.sym
 
 # TODO: Fix the need to include boot for mmu.h
 
 $(asmobjs): %.o: %.S
-	$(CC) -c -I $(dir_0) $(ASFLAGS) $< -o $@
+	$(CC) -c -I $(dir_0) $(ASFLAGS) -o $@ $<
 
 $(cobjs): %.o: %.c
 

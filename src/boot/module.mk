@@ -1,6 +1,6 @@
 dir_0      := boot
 source     := bootmain.c bootasm.S entryother.S entry.S
-local_bins := $(addprefix $(dir_0)/, bootblock entryother)
+# local_bins := $(addprefix $(dir_0)/, bootblock entryother)
 local_src  := $(addprefix $(dir_0)/,$(source))
 local_objs := $(subst .c,.o,$(filter %.c,$(local_src))) \
               $(subst .S,.o,$(filter %.S,$(local_src))) \
@@ -13,17 +13,17 @@ local_objs := $(subst .c,.o,$(filter %.c,$(local_src))) \
 
 objects  += $(local_objs)
 sources  += $(local_src)
-binaries += $(local_bins)
-toclean  += $(dir_0)/*.asm
+binaries += bootblock entryother
+toclean  += $(dir_0)/*.asm $(dir_0)/*.o $(dir_0)/*.d
 
 # TODO: What does objcopy do?
 
-$(dir_0)/bootblock: $(dir_0)/bootblock.o
+bootblock: $(dir_0)/bootblock.o
 	$(OBJDUMP) -S $< > $(dir_0)/bootblock.asm
 	$(OBJCOPY) -S -O binary -j .text $< $@
 	./$(dir_0)/sign.pl $@
 
-$(dir_0)/entryother: $(dir_0)/bootblockother.o
+entryother: $(dir_0)/bootblockother.o
 	$(OBJCOPY) -S -O binary -j .text $< $@
 	$(OBJDUMP) -S $< > $(dir_0)/entryother.asm
 
@@ -45,12 +45,12 @@ $(dir_0)/bootblockother.o: $(dir_0)/entryother.o
 # TODO: Not sure if I need the -I. below
 
 $(dir_0)/bootmain.o: $(dir_0)/bootmain.c
-	$(CC) $(CFLAGS) -fno-pic -O -nostdinc -I. -c $< -o $@
+	$(CC) $(CFLAGS) -fno-pic -O -nostdinc -I. -c -o $@ $<
 
 # TODO: Maybe merge .S rules?
 
 $(dir_0)/bootasm.o: $(dir_0)/bootasm.S
-	$(CC) $(CFLAGS) -fno-pic -nostdinc -I. -c $< -o $@
+	$(CC) $(CFLAGS) -fno-pic -nostdinc -I. -c -o $@ $<
 
 $(dir_0)/entryother.o: $(dir_0)/entryother.S
-	$(CC) $(CFLAGS) -fno-pic -nostdinc -I. -c $< -o $@
+	$(CC) $(CFLAGS) -fno-pic -nostdinc -I. -c -o $@ $<
