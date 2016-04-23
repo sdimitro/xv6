@@ -1,5 +1,5 @@
 dir_0      := boot
-source     := bootmain.c bootasm.S entryother.S
+source     := bootmain.c bootasm.S entryother.S entry.S
 local_bins := $(addprefix $(dir_0)/, bootblock entryother)
 local_src  := $(addprefix $(dir_0)/,$(source))
 local_objs := $(subst .c,.o,$(filter %.c,$(local_src))) \

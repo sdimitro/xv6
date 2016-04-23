@@ -83,7 +83,7 @@ ASFLAGS = -m32 -gdwarf-2 -Wa,-divide
 # Illumos-Solaris might want to try``elf_i386_sol2''
 LDFLAGS += -m $(shell $(LD) -V | grep elf_i386 2>/dev/null)
 
-modules := boot kernel/init
+modules := boot kernel/init kernel
 
 CFLAGS  += $(patsubst %,-I%, $(modules))
 
@@ -182,11 +182,11 @@ clean:
 ## mkfs: mkfs.c fs.h
 ## 	gcc -Werror -Wall -o mkfs mkfs.c
 ## 
-## # Prevent deletion of intermediate files, e.g. cat.o, after first build, so
-## # that disk image changes after first build are persistent until clean.  More
-## # details:
-## # http://www.gnu.org/software/make/manual/html_node/Chained-Rules.html
-## .PRECIOUS: %.o
+# Prevent deletion of intermediate files, e.g. cat.o, after first build, so
+# that disk image changes after first build are persistent until clean.  More
+# details:
+# http://www.gnu.org/software/make/manual/html_node/Chained-Rules.html
+.PRECIOUS: %.o
 ## 
 ## UPROGS=\
 ## 	_cat\
